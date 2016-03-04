@@ -75,6 +75,7 @@ var play_state = {
         if (fish.angle < 20) {
             fish.angle += 0.5;
         }
+    
         if (fish.alive === true) {
         this.game.physics.arcade.collide(fish, this.frypans, this.hit_frypan, null, this);
         }

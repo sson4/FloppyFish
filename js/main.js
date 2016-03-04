@@ -6,7 +6,7 @@ var score = -1;
 
 
 var fish;
-var pipe;
+var frypan;
 var gasp;
 var choiceLabel;
 var pause_label;
@@ -19,7 +19,7 @@ var load_state = {
         
         game.stage.backgroundColor = '#71c5cf';
         game.load.image('fish', 'assets/fish.png');
-        game.load.image('pipe', 'assets/pipe.png');  
+        game.load.image('frypan', 'assets/frypan.png');  
         game.load.image('gasp', 'assets/gasp.png');
     },
     
@@ -33,7 +33,7 @@ var play_state = {
     create: function() {
        
         fish = game.add.sprite(60, 250, 'fish');
-        fish.scale.setTo(0.6, 0.6);
+        fish.scale.setTo(0.7, 0.7);
         gasp = game.add.sprite(-100, -100, 'gasp');
     
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -45,10 +45,10 @@ var play_state = {
         
         game.input.onDown.add(this.jump, this);
         
-        this.pipes = game.add.group();
-        this.pipes.createMultiple(10, 'pipe');
+        this.frypans = game.add.group();
+        this.frypans.createMultiple(10, 'frypan');
         
-        this.timer = this.game.time.events.loop(1700, this.add_row_of_pipes, this);
+        this.timer = this.game.time.events.loop(1700, this.add_row_of_frypans, this);
         
         var style = { font: "30px Arial", fill: "#ffffff" };
 
@@ -76,7 +76,7 @@ var play_state = {
             fish.angle += 0.5;
         }
         if (fish.alive === true) {
-        this.game.physics.arcade.collide(fish, this.pipes, this.hit_pipe, null, this);
+        this.game.physics.arcade.collide(fish, this.frypans, this.hit_frypan, null, this);
         }
         if (this.checkOverlap(fish, gasp)) {
             if (trueScore === 1) {
@@ -114,15 +114,15 @@ var play_state = {
       
     },
 
-    hit_pipe: function() {
+    hit_frypan: function() {
         if (fish.alive === false) {
             return;
         }
-        pipe.body.moves = false;
+        frypan.body.moves = false;
         gasp.body.moves = false;
         fish.alive = false;
         this.game.time.events.remove(this.timer);
-        this.pipes.forEachAlive(function(p){
+        this.frypans.forEachAlive(function(p){
             p.body.velocity.x = 0;
             p.body.velocity.y = 0;
         }, this);
@@ -133,11 +133,11 @@ var play_state = {
         this.game.state.start('play');
     },
     
-    add_row_of_pipes: function() {
+    add_row_of_frypans: function() {
         var hole = Math.floor(Math.random()*5)+1;
         for (var i = 0; i < 8; i++) {
             if (i != hole && i != hole +1) {
-                this.add_one_pipe(320, i*60+5);   
+                this.add_one_frypan(320, i*60+5);   
             }
             }
         for (var t = 0; t < 1; t++) {
@@ -147,17 +147,17 @@ var play_state = {
         
     },
    
-    add_one_pipe: function(x, y) {
+    add_one_frypan: function(x, y) {
            
-            pipe = this.pipes.getFirstDead();
-            pipe.reset(x, y);
+            frypan = this.frypans.getFirstDead();
+            frypan.reset(x, y);
         
-            game.physics.enable(pipe, Phaser.Physics.ARCADE);
-            pipe.scale.setTo(0.8, 0.8);
-            pipe.body.velocity.setTo(-220, 0);
-            pipe.body.bounce.set(0);
-            pipe.checkWorldBounds = true;
-            pipe.outOfBoundsKill = true;
+            game.physics.enable(frypan, Phaser.Physics.ARCADE);
+            frypan.scale.setTo(0.8, 0.8);
+            frypan.body.velocity.setTo(-220, 0);
+            frypan.body.bounce.set(0);
+            frypan.checkWorldBounds = true;
+            frypan.outOfBoundsKill = true;
             trueScore = 1;
     },
     addTransparent: function(x, y) {
